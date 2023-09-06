@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use TYPO3\CodingStandards\CsFixerConfig;
 
@@ -22,7 +22,6 @@ $rules += [
         'import_constants' => false,
         'import_functions' => false,
     ],
-    'no_extra_blank_lines' => true,
     'no_multiple_statements_per_line' => true,
     'no_unneeded_import_alias' => true,
     'ordered_imports' => [
@@ -50,10 +49,6 @@ $rules += [
         ],
     ],
     'phpdoc_trim_consecutive_blank_line_separation' => true,
-    'phpdoc_types_order' => [
-        'null_adjustment' => 'always_last',
-        'sort_algorithm' => 'alpha',
-    ],
     'phpdoc_var_annotation_correct_order' => true,
     'phpdoc_var_without_name' => true,
     'self_accessor' => true,

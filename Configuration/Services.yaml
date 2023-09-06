@@ -12,7 +12,7 @@ services:
     public: true
   Mirko\T3maker\:
     resource: '../Classes/*'
-    exclude: [ '../Classes/Tca/*', '../Classes/Doctrine/*' ]
+    exclude: [ '../Classes/Tca/*' ]
   Mirko\T3maker\Generator\UseStatementGenerator:
     autowire: false
   Mirko\T3maker\Utility\ClassDetails:

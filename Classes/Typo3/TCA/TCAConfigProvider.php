@@ -102,10 +102,8 @@ class TCAConfigProvider
      *
      * @return ConfigRenderTypeInterface|null
      */
-    public function getConfigRenderTypeByName(
-        $configRenderTypes,
-        string $renderTypeName
-    ): ConfigRenderTypeInterface|null {
+    public function getConfigRenderTypeByName($configRenderTypes, string $renderTypeName): ?ConfigRenderTypeInterface
+    {
         foreach ($configRenderTypes as $renderType) {
             if ($renderType::getTypeName() === $renderTypeName) {
                 return $renderType;

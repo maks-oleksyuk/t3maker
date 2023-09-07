@@ -11,7 +11,7 @@ class Config
 {
     private ConfigTypeInterface $type;
 
-    private ConfigRenderTypeInterface|null $renderType = null;
+    private ?ConfigRenderTypeInterface $renderType = null;
     private array $renderTypeConfig = [];
 
     public function __construct(ConfigTypeInterface $type)

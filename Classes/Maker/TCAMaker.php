@@ -97,10 +97,8 @@ class TCAMaker extends AbstractMaker
         return $manipulator;
     }
 
-    private function askForNextField(
-        SymfonyStyle $io,
-        array $columnConfigurations,
-    ): string|null {
+    private function askForNextField(SymfonyStyle $io, array $columnConfigurations): ?string
+    {
         $io->writeln('');
 
         $choices = array_keys($columnConfigurations);

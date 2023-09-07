@@ -43,8 +43,8 @@ class TCASourceManipulator
         }
 
         if (
-            !array_key_exists('type', $this->tcaConfiguration['columns'][$columnName]['config']) ||
-            $this->tcaConfiguration['columns'][$columnName]['config']['type'] !== $config['type']
+            !array_key_exists('type', $this->tcaConfiguration['columns'][$columnName]['config'])
+            || $this->tcaConfiguration['columns'][$columnName]['config']['type'] !== $config['type']
         ) {
             $this->tcaConfiguration['columns'][$columnName]['config'] = $config;
             return;

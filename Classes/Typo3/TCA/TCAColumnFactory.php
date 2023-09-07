@@ -107,7 +107,7 @@ class TCAColumnFactory
         return $this->TCAConfigProvider->getConfigTypeByName($this->io->askQuestion($question));
     }
 
-    private function askConfigurationForRenderType(ConfigTypeInterface $configType): ConfigRenderTypeInterface|null
+    private function askConfigurationForRenderType(ConfigTypeInterface $configType): ?ConfigRenderTypeInterface
     {
         $renderTypes = $this->TCAConfigProvider->getAvailableConfigRenderTypesForConfigType($configType);
 

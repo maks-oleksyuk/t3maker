@@ -23,7 +23,7 @@ class PackageUtility
         $namespaces = AutoloadUtility::getPackageNamespace($package);
         $classes = [];
         foreach ($namespaces as $namespace => $path) {
-            $searchPath = $package->getPackagePath() . $path . Str::asFilePath($directNamespace);
+            $searchPath = $package->getPackagePath() . $path . str_replace('\\', '/', $directNamespace);
             if (!is_dir($searchPath)) {
                 continue;
             }

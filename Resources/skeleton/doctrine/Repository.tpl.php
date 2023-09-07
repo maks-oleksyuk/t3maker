@@ -6,6 +6,4 @@ namespace <?= $namespace; ?>;
 
 class <?= $class_name; ?> extends Repository
 {
-
-
 }

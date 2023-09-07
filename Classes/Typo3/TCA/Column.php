@@ -12,5 +12,5 @@ class Column
 
     private string $description = '';
 
-    private Config|null $config = null;
+    private ?Config $config = null;
 }

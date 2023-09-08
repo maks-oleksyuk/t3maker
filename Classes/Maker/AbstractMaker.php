@@ -19,7 +19,9 @@ abstract class AbstractMaker implements MakerInterface
      */
     protected function writeSuccessMessage(SymfonyStyle $io): void
     {
+        $io->writeln(' <bg=green;fg=white>          </>');
         $io->writeln(' <bg=green;fg=white> Success! </>');
+        $io->writeln(' <bg=green;fg=white>          </>');
         $io->newLine();
     }
 

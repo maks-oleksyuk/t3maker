@@ -9,12 +9,14 @@ use Mirko\T3maker\Generator\Generator;
 use Mirko\T3maker\Maker\MakerInterface;
 use Mirko\T3maker\Utility\Typo3Utility;
 use Mirko\T3maker\Validator\ClassValidator;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 abstract class AbstractMakeCommand extends Command
 {
@@ -34,34 +36,40 @@ abstract class AbstractMakeCommand extends Command
 
     /**
      * @inheritDoc
-     */
-    protected function configure(): void
-    {
-        $this->addArgument(
-            'extensionName',
-            InputArgument::REQUIRED,
-            'Name for which extension command will be executed'
-        );
-    }
-
-    /**
-     * @inheritDoc
      *
      * @throws LogicException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!Typo3Utility::isExtensionLoaded($input->getArgument('extensionName'))) {
-            $extensionName = $input->getArgument('extensionName');
-            $this->io->error('Extension key ' . $extensionName . ' is not loaded!');
-            return Command::FAILURE;
-        }
+        $ext_list = array_filter(
+            ExtensionManagementUtility::getLoadedExtensionListArray(),
+            fn ($ext) => !str_ends_with(ExtensionManagementUtility::extPath($ext), '/sysext/' . $ext . '/')
+        );
 
-        $this->maker->generate($input, $this->io, $this->generator);
+        $question = new Question('Name for which extension command will be executed');
+        // todo: Remove modules from autocomplete installed from composer in v12.
+        $question->setAutocompleterValues($ext_list);
+        $question->setValidator(function (string $answer) use ($ext_list): string {
+            if (!Typo3Utility::isExtensionLoaded($answer)) {
+                throw new RuntimeException('Given extensions [ ' . $answer . ' ] not found in the system.');
+            }
+            if (!in_array($answer, $ext_list)) {
+                throw new RuntimeException('Given extensions [ ' . $answer . ' ] is part of the typo3 core.');
+            }
 
-        if ($this->generator->hasPendingOperations()) {
-            throw new LogicException('Make sure to call the writeChanges() method on the generator.');
-        }
+            return $answer;
+        });
+
+        $this->extensionName = $this->io->askQuestion($question);
+        $this->addArgument(
+            'extensionName',
+            InputArgument::REQUIRED,
+            'Name for which extension command will be executed',
+        );
+        $input->setArgument('extensionName', $this->extensionName);
+        /* if ($this->generator->hasPendingOperations()) {
+             throw new LogicException('Make sure to call the writeChanges() method on the generator.');
+         }*/
 
         return Command::SUCCESS;
     }
@@ -71,16 +79,16 @@ abstract class AbstractMakeCommand extends Command
      */
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
-        $extensionName = $input->getArgument('extensionName');
-        if ($extensionName) {
-            return;
-        }
+        /* $extensionName = $input->getArgument('extensionName');
+           if ($extensionName) {
+               return;
+           }
 
-        $argument = $this->getDefinition()->getArgument('extensionName');
-        $question = $this->createClassQuestion($argument->getDescription());
-        $extensionName = $this->io->askQuestion($question);
+           $argument = $this->getDefinition()->getArgument('extensionName');
+           $question = $this->createClassQuestion($argument->getDescription());
+           $extensionName = $this->io->askQuestion($question);
 
-        $input->setArgument('extensionName', $extensionName);
+           $input->setArgument('extensionName', $extensionName);*/
     }
 
     /**
